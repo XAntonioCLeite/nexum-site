@@ -27,6 +27,10 @@
   },
   "exclude": [
     "nexum-gemini-proxy",
-    "nexum-gemini-proxy/**"
+    "nexum-gemini-proxy/**",
+    "functions",
+    "functions/**",
+    "admin-panel",
+    "admin-panel/**"
   ]
 }

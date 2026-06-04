@@ -1,13 +1,14 @@
-import React from 'react';
-import { Moon, MessageCircle, BrainCircuit, CalendarCheck, Rocket, Check, Zap } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { Moon, MessageCircle, BrainCircuit, CalendarCheck, Rocket, Check, Zap, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const HowItWorksSection: React.FC = () => {
+  const [activeStep, setActiveStep] = useState<number | null>(1);
   const steps = [
     {
       id: 1,
       title: "Paciente chama (23:45h)",
-      desc: "O paciente envia uma mensagem fora do horário comercial querendo agendar. Normalmente, isso seria uma oportunidade perdida.",
+      desc: "O paciente envia uma mensagem fora do horário comercial querendo agendar. Com a nossa ajuda, isso deixa de ser uma oportunidade perdida.",
       icon: <Moon className="w-5 h-5 text-indigo-400" />,
       iconBg: "bg-indigo-500/10",
       borderColor: "group-hover:border-indigo-500/30",
@@ -131,7 +132,7 @@ const HowItWorksSection: React.FC = () => {
            <motion.h2 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
+             viewport={{ once: true, amount: 0.25 }}
              className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight"
            >
              Como funciona?
@@ -139,7 +140,7 @@ const HowItWorksSection: React.FC = () => {
            <motion.p 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
+             viewport={{ once: true, amount: 0.25 }}
              transition={{ delay: 0.1 }}
              className="text-slate-400 text-lg"
            >
@@ -147,14 +148,14 @@ const HowItWorksSection: React.FC = () => {
            </motion.p>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Desktop View: Cards Grid */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            {steps.map((step, index) => (
              <motion.div
                key={step.id}
                initial={{ opacity: 0, y: 30 }}
                whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
+               viewport={{ once: true, amount: 0.25 }}
                transition={{ delay: index * 0.1 }}
                className={`group relative bg-[#121215] border border-white/10 rounded-2xl overflow-hidden ${step.borderColor} hover:border-opacity-100 transition-all duration-300 flex flex-col`}
              >
@@ -189,6 +190,68 @@ const HowItWorksSection: React.FC = () => {
                 <div className={`absolute bottom-0 left-0 w-full h-1 ${step.lineColor} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
              </motion.div>
            ))}
+        </div>
+
+        {/* Mobile View: Accordion Layout */}
+        <div className="md:hidden flex flex-col gap-4">
+          {steps.map((step) => {
+            const isOpen = activeStep === step.id;
+            return (
+              <div 
+                key={step.id}
+                className={`border rounded-2xl bg-[#121215] transition-all duration-300 overflow-hidden ${
+                  isOpen ? 'border-deepBlue/50 shadow-[0_0_20px_rgba(10,36,99,0.2)]' : 'border-white/10'
+                }`}
+              >
+                <button
+                  onClick={() => setActiveStep(isOpen ? null : step.id)}
+                  className="w-full flex items-center justify-between p-5 text-left focus:outline-none bg-transparent"
+                  aria-expanded={isOpen}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="text-xs font-mono font-bold text-slate-500">0{step.id}</span>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border border-white/10 ${step.iconBg}`}>
+                      {step.icon}
+                    </div>
+                    <span className={`text-base font-bold transition-colors ${isOpen ? 'text-white' : 'text-slate-300'}`}>
+                      {step.title}
+                    </span>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-slate-400"
+                  >
+                    <ChevronDown size={18} />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
+                      <div className="px-5 pb-5 pt-1 border-t border-white/5 flex flex-col gap-4">
+                        {/* Visual Mockup inside Accordion */}
+                        <div className="h-40 rounded-xl bg-black/40 border border-white/5 overflow-hidden relative flex items-center justify-center">
+                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:12px_12px] opacity-20"></div>
+                          <div className="scale-90 w-full h-full flex items-center justify-center">
+                            {step.visual}
+                          </div>
+                        </div>
+                        <p className="text-sm text-slate-400 leading-relaxed">
+                          {step.desc}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
 
       </div>

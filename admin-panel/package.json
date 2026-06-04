@@ -1,0 +1,29 @@
+{
+  "name": "nexum-admin-panel",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^12.29.2",
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "firebase-admin": "^12.0.0",
+    "@google/generative-ai": "^0.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vercel/node": "^3.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.3.3",
+    "vite": "^5.2.0"
+  }
+}

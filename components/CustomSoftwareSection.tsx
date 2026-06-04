@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Code, Globe, Cpu, Laptop, Layers, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const CustomSoftwareSection: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
   const services = [
     {
       id: 1,
@@ -124,7 +125,7 @@ const CustomSoftwareSection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.25 }}
               className="mb-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold"
             >
               <Zap size={12} className="text-blue-400" />
@@ -133,7 +134,7 @@ const CustomSoftwareSection: React.FC = () => {
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.25 }}
               transition={{ delay: 0.1 }}
               className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.1]"
             >
@@ -144,7 +145,7 @@ const CustomSoftwareSection: React.FC = () => {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.25 }}
             transition={{ delay: 0.2 }}
             className="max-w-sm flex flex-col gap-6"
           >
@@ -163,14 +164,14 @@ const CustomSoftwareSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Grid Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Desktop View: Grid Layout */}
+        <div className="hidden md:grid grid-cols-3 gap-6">
           {services.map((svc, idx) => (
             <motion.div
               key={svc.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.25 }}
               transition={{ delay: idx * 0.1 }}
               className={`group relative min-h-[480px] rounded-3xl bg-[#0f1214] border border-white/10 ${svc.borderColor} transition-all duration-500 overflow-hidden flex flex-col`}
             >
@@ -209,6 +210,91 @@ const CustomSoftwareSection: React.FC = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Mobile View: Tabbed Layout (Saves scroll length) */}
+        <div className="md:hidden flex flex-col gap-6">
+          <div className="grid grid-cols-3 gap-2 p-1.5 bg-[#0f1214] border border-white/10 rounded-2xl">
+            <button
+              onClick={() => setActiveTab(0)}
+              className={`py-3 text-xs font-bold rounded-xl transition-all ${
+                activeTab === 0
+                  ? 'bg-deepBlue text-white border border-blue-500/25 shadow-lg'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Sites
+            </button>
+            <button
+              onClick={() => setActiveTab(1)}
+              className={`py-3 text-xs font-bold rounded-xl transition-all ${
+                activeTab === 1
+                  ? 'bg-deepBlue text-white border border-blue-500/25 shadow-lg'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              Sistemas
+            </button>
+            <button
+              onClick={() => setActiveTab(2)}
+              className={`py-3 text-xs font-bold rounded-xl transition-all ${
+                activeTab === 2
+                  ? 'bg-deepBlue text-white border border-blue-500/25 shadow-lg'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              APIs & Integr.
+            </button>
+          </div>
+
+          <div className="w-full">
+            {services.map((svc, idx) => {
+              if (idx !== activeTab) return null;
+              return (
+                <motion.div
+                  key={svc.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`group relative min-h-[480px] rounded-3xl bg-[#0f1214] border border-white/10 ${svc.borderColor} transition-all duration-500 overflow-hidden flex flex-col`}
+                >
+                  {/* Visual Header */}
+                  <div className="h-44 bg-gradient-to-b from-white/5 to-transparent relative overflow-hidden flex items-center justify-center">
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:16px_16px]"></div>
+                    {svc.visual}
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8 pt-6 mt-auto border-t border-white/5 bg-[#0f1214] relative z-20 flex-1 flex flex-col">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 border border-white/10 ${svc.iconBg}`}>
+                      {svc.icon}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {svc.title}
+                    </h3>
+                    <span className="text-xs text-blue-400 font-medium mb-3 block font-mono">
+                      {svc.subtitle}
+                    </span>
+                    
+                    <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                      {svc.desc}
+                    </p>
+
+                    {/* Features List */}
+                    <ul className="space-y-2 mt-auto border-t border-white/5 pt-4">
+                      {svc.features.map((feat, fIdx) => (
+                        <li key={fIdx} className="flex items-center gap-2 text-xs text-slate-300">
+                          <div className="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
 
       </div>

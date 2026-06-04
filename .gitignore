@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environments
+.env
+.env.*
+!.env.example
+node_modules/
+admin-panel/node_modules/
+functions/node_modules/

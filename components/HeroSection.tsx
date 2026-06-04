@@ -11,7 +11,11 @@ import FAQSection from './FAQSection';
 import FinalCTASection from './FinalCTASection';
 import { ArrowRight, Lock, Zap, Shield, BarChart3, Users, Sparkles } from 'lucide-react';
 
-const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  onOpenSubscribe: () => void;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ onOpenSubscribe }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Track window width for mobile responsiveness
@@ -59,8 +63,8 @@ const HeroSection: React.FC = () => {
       {/* SMOKE EFFECTS LAYER */}
       <SmokeEffect className="absolute top-[600px] bottom-0 left-0 right-0 w-full h-auto z-0" />
 
-      {/* Top Section Content - Increased Height */}
-      <div className="relative w-full min-h-[85vh] md:h-[1050px] overflow-hidden flex flex-col items-center pt-32 md:pt-44 px-4 border-b border-white/10 z-10">
+      {/* Top Section Content - Optimized for Above the Fold on Mobile */}
+      <div className="relative w-full min-h-[75vh] md:min-h-[85vh] md:h-[1050px] overflow-hidden flex flex-col items-center pt-24 pb-8 md:pt-44 px-4 border-b border-white/10 z-10">
         
         {/* Header Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center">
@@ -69,7 +73,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="mb-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-deepBlue/20 border border-deepBlue/30 text-blue-200 text-sm font-medium backdrop-blur-sm shadow-[0_0_20px_rgba(10,36,99,0.3)] ring-1 ring-white/5"
+            className="mb-4 md:mb-6 inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full bg-deepBlue/20 border border-deepBlue/30 text-blue-200 text-xs md:text-sm font-medium backdrop-blur-sm shadow-[0_0_20px_rgba(10,36,99,0.3)] ring-1 ring-white/5"
           >
             {/* Mint for Contrast */}
             <Sparkles size={14} className="text-mint" />
@@ -80,7 +84,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight mb-8 leading-tight drop-shadow-2xl relative"
+            className="text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight mb-4 md:mb-8 leading-tight drop-shadow-2xl relative"
           >
             O novo padrão em <br />
             <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-400 to-white">
@@ -92,7 +96,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-slate-400 max-w-4xl mx-auto mb-12 leading-relaxed font-light relative z-10"
+            className="text-base md:text-2xl text-slate-400 max-w-4xl mx-auto mb-6 md:mb-12 leading-relaxed font-light relative z-10"
           >
             Substitua processos manuais e telefonia por uma <span className="text-blue-400 font-medium">inteligência conversacional</span> que entende o contexto clínico e gerencia sua agenda 24/7.
           </motion.p>
@@ -107,7 +111,7 @@ const HeroSection: React.FC = () => {
               href="https://wa.me/5527995331369" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="px-10 py-5 text-lg bg-deepBlue text-white font-bold rounded-full hover:bg-[#0d2e7a] hover:scale-105 transition-all flex items-center gap-2 group shadow-[0_0_20px_rgba(10,36,99,0.4)] hover:shadow-[0_0_40px_rgba(10,36,99,0.6)]"
+              className="px-6 py-3.5 text-base md:px-10 md:py-5 md:text-lg bg-deepBlue text-white font-bold rounded-full hover:bg-[#0d2e7a] hover:scale-105 transition-all flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(10,36,99,0.4)] hover:shadow-[0_0_40px_rgba(10,36,99,0.6)] w-full sm:w-auto"
             >
               Começar agora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -116,15 +120,15 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* 3D Dashboard Container */}
-      <div className="w-full px-4 md:px-8 perspective-container -mt-16 md:-mt-[250px] mb-20 md:mb-[400px] z-20" style={{ perspective: '1200px' }}>
+      {/* 3D Dashboard Container - Disabled 3D on mobile to prevent scrolling obstacles */}
+      <div className="w-full px-4 md:px-8 perspective-container mt-8 md:-mt-[250px] mb-12 md:mb-[400px] z-20" style={{ perspective: isMobile ? 'none' : '1200px' }}>
         <motion.div
           style={{ 
             rotateX: isMobile ? 0 : rotateX,
-            scale,
-            opacity,
+            scale: isMobile ? 1 : scale,
+            opacity: isMobile ? 1 : opacity,
             y: isMobile ? 0 : y,
-            transformStyle: 'preserve-3d',
+            transformStyle: isMobile ? 'flat' : 'preserve-3d',
           }}
           className="max-w-6xl mx-auto"
         >
@@ -194,6 +198,28 @@ const HeroSection: React.FC = () => {
 
       {/* FAQ Section */}
       <FAQSection />
+
+      {/* Newsletter Radar Capture Section */}
+      <section className="w-full py-20 bg-gradient-to-b from-black to-[#070709] border-t border-white/5 relative z-20">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-mint/10 border border-mint/20 text-mint text-xs font-mono mb-6">
+            <Sparkles size={12} className="animate-pulse" />
+            <span>Radar Nexum AI</span>
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+            Fique por dentro das novas tecnologias
+          </h2>
+          <p className="text-slate-400 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed">
+            Inscreva seu e-mail ou WhatsApp para receber atualizações bi-semanais sobre as nossas mais novas tecnologias de automação!
+          </p>
+          <button
+            onClick={onOpenSubscribe}
+            className="px-8 py-4 bg-deepBlue hover:bg-blue-600 text-white font-bold text-sm rounded-xl transition-all shadow-[0_0_15px_rgba(10,36,99,0.3)] hover:scale-105"
+          >
+            Cadastrar no Radar
+          </button>
+        </div>
+      </section>
 
       {/* Final CTA Section */}
       <FinalCTASection />

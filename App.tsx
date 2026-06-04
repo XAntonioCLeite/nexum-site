@@ -4,16 +4,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import HeroSection from './components/HeroSection';
 import BusinessChatWidget from './components/BusinessChatWidget';
 import Footer from './components/Footer';
+import SubscriptionModal from './components/SubscriptionModal';
 import logoInversa from './public/logo-inversa.png';
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSubModalOpen, setIsSubModalOpen] = useState(false);
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      const offset = 90; // height of navbar + padding
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
@@ -149,7 +160,7 @@ const App: React.FC = () => {
 
       {/* Main Content */}
       <main>
-        <HeroSection />
+        <HeroSection onOpenSubscribe={() => setIsSubModalOpen(true)} />
       </main>
 
       {/* AI Chat Widget */}
@@ -157,6 +168,25 @@ const App: React.FC = () => {
 
       {/* New Footer */}
       <Footer />
+
+      {/* Subscription Modal (Two-step opt-in) */}
+      <SubscriptionModal isOpen={isSubModalOpen} onClose={() => setIsSubModalOpen(false)} />
+
+      {/* Sticky CTA Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full z-45 bg-[#0d0e12]/95 backdrop-blur-md border-t border-white/10 p-4 flex items-center justify-between shadow-[0_-10px_25px_rgba(0,0,0,0.5)]">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-mono font-bold text-mint uppercase tracking-wider">Nexum AI</span>
+          <span className="text-xs text-slate-300 font-semibold">Pronto para automatizar?</span>
+        </div>
+        <a 
+          href="https://wa.me/5527995331369" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="px-5 py-2.5 bg-deepBlue hover:bg-blue-600 text-white font-bold text-xs rounded-full border border-white/10 shadow-[0_0_15px_rgba(10,36,99,0.3)] transition-all flex items-center gap-1.5"
+        >
+          Falar no WhatsApp
+        </a>
+      </div>
     </div>
   );
 };

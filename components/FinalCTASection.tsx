@@ -16,7 +16,7 @@ const FinalCTASection: React.FC = () => {
         <motion.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.8 }}
           className="w-full bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden mb-24 relative"
         >
@@ -142,7 +142,7 @@ const FinalCTASection: React.FC = () => {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-6xl font-bold text-white tracking-tight mb-6"
           >
@@ -152,17 +152,17 @@ const FinalCTASection: React.FC = () => {
           <motion.p 
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
+             viewport={{ once: true, amount: 0.25 }}
              transition={{ duration: 0.6, delay: 0.1 }}
              className="text-xl text-slate-400 font-light mb-10"
           >
-            Sua recepção automatizada e eficiente está a uma conversa de distância.
+             Sua recepção automatizada e eficiente está a uma conversa de distância.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col items-center gap-4"
           >

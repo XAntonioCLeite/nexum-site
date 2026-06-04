@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /leads/{lead} {
+      allow write: if true; // Permitir que qualquer visitante se inscreva
+      allow read: if true;  // Permitir que o Painel Admin consulte (no mundo real, você adicionaria auth.uid != null)
+    }
+  }
+}
