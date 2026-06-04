@@ -49,7 +49,7 @@ services:
     environment:
       - SERVER_PORT=8080
       - SERVER_URL=http://localhost:8080
-      - API_KEY=ChaveGlobalSeguraEvolution123
+      - AUTHENTICATION_API_KEY=ChaveGlobalSeguraEvolution123
       - CORS_ORIGIN=*
       - CORS_METHODS=GET,POST,PUT,DELETE
       - CORS_HEADERS=Content-Type,Authorization,apikey
