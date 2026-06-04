@@ -30,16 +30,19 @@ export class WhatsAppService {
     // Se estiver usando um gateway alternativo (Z-API / Evolution)
     if (gatewayUrl && gatewayUrl.trim()) {
       try {
-        const response = await fetch(`${gatewayUrl}/sendMessage`, {
+        const isEvolution = gatewayUrl.includes('/message/sendText');
+        const url = isEvolution ? gatewayUrl : `${gatewayUrl}/sendMessage`;
+        const body = isEvolution 
+          ? { number: cleanNumber, text: text }
+          : { number: cleanNumber, message: text };
+
+        const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': gatewayApiKey
           },
-          body: JSON.stringify({
-            number: cleanNumber,
-            message: text
-          })
+          body: JSON.stringify(body)
         });
 
         if (!response.ok) {
