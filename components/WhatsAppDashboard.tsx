@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, MoreVertical, Phone, Video, Paperclip, Mic, CheckCheck, Clock, Smile, Camera, ChevronLeft, ArrowLeft } from 'lucide-react';
 import { Lead } from '../types';
+import logoSolido from '../public/logo-solido.png';
 
 const leads: Lead[] = [
   { id: '1', name: 'Fernanda Costa', avatar: 'https://picsum.photos/seed/fernanda/50/50', status: 'paid', lastMessage: 'Confirmado para amanhã!', time: '10:42', unread: 0 },
@@ -26,7 +27,7 @@ const WhatsAppDashboard: React.FC = () => {
         {/* Header Sidebar */}
         <div className="h-14 md:h-16 bg-whatsappSidebar flex items-center justify-center md:justify-between px-2 md:px-4 shrink-0">
           <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-600 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
-             <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100&h=100" alt="Me" className="w-full h-full object-cover" />
+             <img src={logoSolido} alt="Me" className="w-full h-full object-contain bg-white p-1" />
           </div>
           <div className="hidden md:flex gap-1">
             <IconButton icon={<div className="w-5 h-5 border-2 border-dashed border-current rounded-full" />} />

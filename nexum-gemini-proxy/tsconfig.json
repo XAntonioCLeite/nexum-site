@@ -5,16 +5,16 @@
     "useDefineForClassFields": false,
 
     "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
 
     "skipLibCheck": true,
 
     "types": ["vite/client", "node"],
 
-    "moduleResolution": "bundler",
     "isolatedModules": true,
-    "moduleDetection": "force",
-
     "allowJs": true,
     "jsx": "react-jsx",
 
@@ -25,8 +25,5 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "exclude": [
-    "nexum-gemini-proxy",
-    "nexum-gemini-proxy/**"
-  ]
+  "exclude": ["nexum-gemini-proxy", "nexum-gemini-proxy/**"]
 }

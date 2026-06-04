@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import WhatsAppDashboard from './WhatsAppDashboard';
 import SmokeEffect from './SmokeEffect';
 import AIIntegrationSection from './AIIntegrationSection';
 import FeaturesGrid from './FeaturesGrid';
 import AutomatedIntelligenceSection from './AutomatedIntelligenceSection';
+import CustomSoftwareSection from './CustomSoftwareSection';
 import HowItWorksSection from './HowItWorksSection';
 import FAQSection from './FAQSection';
 import FinalCTASection from './FinalCTASection';
@@ -13,6 +14,17 @@ import { ArrowRight, Lock, Zap, Shield, BarChart3, Users, Sparkles } from 'lucid
 const HeroSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Track window width for mobile responsiveness
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Track scroll within the main container
   const { scrollY } = useScroll();
 
@@ -23,6 +35,7 @@ const HeroSection: React.FC = () => {
   
   // Parallax Effect
   const y = useTransform(scrollY, [0, 800], [0, 350]); 
+
 
   return (
     <div className="relative w-full bg-black min-h-[150vh] flex flex-col items-center overflow-hidden">
@@ -47,7 +60,7 @@ const HeroSection: React.FC = () => {
       <SmokeEffect className="absolute top-[600px] bottom-0 left-0 right-0 w-full h-auto z-0" />
 
       {/* Top Section Content - Increased Height */}
-      <div className="relative w-full h-[1050px] overflow-hidden flex flex-col items-center pt-44 px-4 border-b border-white/10 z-10">
+      <div className="relative w-full min-h-[85vh] md:h-[1050px] overflow-hidden flex flex-col items-center pt-32 md:pt-44 px-4 border-b border-white/10 z-10">
         
         {/* Header Content */}
         <div className="relative z-10 max-w-5xl mx-auto text-center">
@@ -91,7 +104,7 @@ const HeroSection: React.FC = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
             <a 
-              href="https://wa.me/+5577981349192" 
+              href="https://wa.me/5527995331369" 
               target="_blank" 
               rel="noopener noreferrer"
               className="px-10 py-5 text-lg bg-deepBlue text-white font-bold rounded-full hover:bg-[#0d2e7a] hover:scale-105 transition-all flex items-center gap-2 group shadow-[0_0_20px_rgba(10,36,99,0.4)] hover:shadow-[0_0_40px_rgba(10,36,99,0.6)]"
@@ -104,13 +117,13 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* 3D Dashboard Container */}
-      <div className="w-full px-4 md:px-8 perspective-container -mt-[250px] mb-[400px] z-20" style={{ perspective: '1200px' }}>
+      <div className="w-full px-4 md:px-8 perspective-container -mt-16 md:-mt-[250px] mb-20 md:mb-[400px] z-20" style={{ perspective: '1200px' }}>
         <motion.div
           style={{ 
-            rotateX,
+            rotateX: isMobile ? 0 : rotateX,
             scale,
             opacity,
-            y,
+            y: isMobile ? 0 : y,
             transformStyle: 'preserve-3d',
           }}
           className="max-w-6xl mx-auto"
@@ -172,6 +185,9 @@ const HeroSection: React.FC = () => {
       
       {/* New Dark Mode SaaS Section */}
       <AutomatedIntelligenceSection />
+
+      {/* Custom Software & Websites Section */}
+      <CustomSoftwareSection />
 
       {/* How It Works Section */}
       <HowItWorksSection />

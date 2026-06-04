@@ -1,9 +1,10 @@
 import React from 'react';
 import { ArrowUpRight, MessageCircle } from 'lucide-react';
+import logoInversa from '../public/logo-inversa.png';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const whatsappLink = "https://wa.me/+5577981349192";
+  const whatsappLink = "https://wa.me/5527995331369";
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -39,6 +40,7 @@ const Footer: React.FC = () => {
           {/* Column 1: Brand */}
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-3">
+              <img src={logoInversa} alt="Nexum AI Logo" className="h-10 w-auto object-contain" />
               <span className="text-xl font-bold text-white tracking-tight">Nexum AI</span>
             </div>
             <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">

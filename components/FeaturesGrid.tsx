@@ -19,7 +19,7 @@ const FeaturesGrid: React.FC = () => {
               Uma plataforma completa que une atendimento humanizado e automação de ponta para transformar sua gestão.
             </p>
             <a 
-              href="https://wa.me/+5577981349192" 
+              href="https://wa.me/5527995331369" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center text-blue-400 hover:text-white transition-colors font-medium group"

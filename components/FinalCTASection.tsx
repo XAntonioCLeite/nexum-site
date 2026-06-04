@@ -167,7 +167,7 @@ const FinalCTASection: React.FC = () => {
             className="flex flex-col items-center gap-4"
           >
             <a 
-              href="https://wa.me/+5577981349192" 
+              href="https://wa.me/5527995331369" 
               target="_blank" 
               rel="noopener noreferrer"
               className="px-10 py-5 text-lg bg-deepBlue text-white font-bold rounded-full hover:scale-105 hover:shadow-[0_0_40px_rgba(10,36,99,0.5)] transition-all flex items-center gap-3 group relative overflow-hidden"

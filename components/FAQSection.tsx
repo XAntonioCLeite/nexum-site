@@ -27,6 +27,14 @@ const faqs: FAQItem[] = [
   {
     question: "Funciona fora do horário comercial?",
     answer: "Sim, 24 horas por dia, 7 dias por semana. É comum nossos clientes chegarem na segunda-feira de manhã com a agenda da semana já preenchida pelos agendamentos feitos automaticamente durante o fim de semana."
+  },
+  {
+    question: "Vocês desenvolvem sites e sistemas de software customizados além da IA?",
+    answer: "Com certeza! Projetamos e desenvolvemos sites corporativos premium, landing pages de alta conversão, e-commerces, dashboards, CRMs e plataformas SaaS completas. Cada projeto é planejado do zero e construído sob medida para se adaptar perfeitamente às necessidades e processos de negócios de cada cliente."
+  },
+  {
+    question: "Como funciona o processo de criação de softwares e sites customizados?",
+    answer: "Nosso processo é ágil e transparente: primeiro realizamos uma reunião de alinhamento técnico para levantar suas necessidades específicas. Em seguida, desenhamos a interface e arquitetura do sistema para sua aprovação. Após isso, nossos engenheiros programam a solução utilizando as tecnologias mais modernas do mercado e realizam todos os testes de qualidade antes do lançamento."
   }
 ];
 
