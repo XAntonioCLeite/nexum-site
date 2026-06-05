@@ -3,10 +3,10 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 export class WhatsAppService {
   static getCredentials() {
     return {
-      token: process.env.META_WHATSAPP_ACCESS_TOKEN || '',
-      phoneId: process.env.META_WHATSAPP_PHONE_NUMBER_ID || '',
-      gatewayUrl: process.env.WHATSAPP_GATEWAY_URL || '',
-      gatewayApiKey: process.env.WHATSAPP_GATEWAY_API_KEY || ''
+      token: (process.env.META_WHATSAPP_ACCESS_TOKEN || '').trim(),
+      phoneId: (process.env.META_WHATSAPP_PHONE_NUMBER_ID || '').trim(),
+      gatewayUrl: (process.env.WHATSAPP_GATEWAY_URL || '').trim(),
+      gatewayApiKey: (process.env.WHATSAPP_GATEWAY_API_KEY || '').trim()
     };
   }
 

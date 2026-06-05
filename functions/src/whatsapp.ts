@@ -3,11 +3,11 @@ import { logger } from 'firebase-functions';
 export class WhatsAppService {
   private static getCredentials() {
     return {
-      token: process.env.META_WHATSAPP_ACCESS_TOKEN || '',
-      phoneId: process.env.META_WHATSAPP_PHONE_NUMBER_ID || '',
+      token: (process.env.META_WHATSAPP_ACCESS_TOKEN || '').trim(),
+      phoneId: (process.env.META_WHATSAPP_PHONE_NUMBER_ID || '').trim(),
       // Se usar um gateway alternativo como Evolution API ou Z-API
-      gatewayUrl: process.env.WHATSAPP_GATEWAY_URL || '',
-      gatewayApiKey: process.env.WHATSAPP_GATEWAY_API_KEY || ''
+      gatewayUrl: (process.env.WHATSAPP_GATEWAY_URL || '').trim(),
+      gatewayApiKey: (process.env.WHATSAPP_GATEWAY_API_KEY || '').trim()
     };
   }
 
