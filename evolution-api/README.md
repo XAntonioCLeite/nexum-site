@@ -14,6 +14,8 @@ Adicione as seguintes chaves na seção **Environment** da sua Web Service no Re
 | `DATABASE_PROVIDER` | `postgresql` | Tipo de banco utilizado (PostgreSQL) |
 | `DATABASE_CONNECTION_URI` | `postgresql://neondb_owner:npg_EfchS17gjtTA@ep-autumn-tree-aphgpqrh.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require` | String de conexão do Neon PostgreSQL |
 | `REDIS_ENABLED` | `false` | Desabilita o Redis para caber no plano grátis |
+| `CACHE_REDIS_ENABLED` | `false` | Desabilita o cache no Redis para evitar logs de erro de conexão |
+| `CACHE_LOCAL_ENABLED` | `true` | Habilita o cache em memória local (in-memory cache) |
 | `DEL_INSTANCE_CLEAN_DATA` | `true` | Limpa dados temporários locais ao apagar instâncias |
 
 ---
