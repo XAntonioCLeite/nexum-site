@@ -1,4 +1,5 @@
-import * as admin from 'firebase-admin';
+import admin from 'firebase-admin';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 if (!admin.apps.length) {
   try {
@@ -20,3 +21,8 @@ if (!admin.apps.length) {
 }
 
 export const db = admin.firestore();
+
+// Handler padrão para evitar exposição pública direta na rota /api/db
+export default async function handler(_req: VercelRequest, res: VercelResponse) {
+  res.status(403).json({ error: 'Acesso proibido' });
+}

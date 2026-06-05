@@ -53,7 +53,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ isOpen, onClose }
     }
 
     try {
-      const functionUrl = import.meta.env.VITE_FIREBASE_FUNCTIONS_URL || 'https://subscribe-leads-api.nexumai.me/subscribeLead';
+      const functionUrl = import.meta.env.VITE_FIREBASE_FUNCTIONS_URL || 'https://admin-panel-black-eta.vercel.app/api/subscribeLead';
       const cleanPhone = phone.replace(/\D/g, '');
 
       const response = await fetch(functionUrl, {
@@ -167,7 +167,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ isOpen, onClose }
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">Fique por dentro das novidades</h3>
                   <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                    Receba análises exclusivas e propagandas de novas ferramentas de automação escritas automaticamente por nossa IA.
+                    Receba análises exclusivas e novidades sobre as nossas ferramentas de automação!
                   </p>
 
                   <form onSubmit={handleSubmit} className="space-y-4 relative z-10">

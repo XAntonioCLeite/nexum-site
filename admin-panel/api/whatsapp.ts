@@ -1,5 +1,7 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
 export class WhatsAppService {
-  private static getCredentials() {
+  static getCredentials() {
     return {
       token: process.env.META_WHATSAPP_ACCESS_TOKEN || '',
       phoneId: process.env.META_WHATSAPP_PHONE_NUMBER_ID || '',
@@ -13,7 +15,7 @@ export class WhatsAppService {
    * @param to Número de telefone com código do país (ex: 5527999999999)
    * @param text Conteúdo da mensagem
    */
-  public static async sendMessage(to: string, text: string): Promise<boolean> {
+  static async sendMessage(to: string, text: string): Promise<boolean> {
     const { token, phoneId, gatewayUrl, gatewayApiKey } = this.getCredentials();
 
     console.log(`Iniciando envio de WhatsApp para ${to}...`);
@@ -33,14 +35,19 @@ export class WhatsAppService {
           ? { number: cleanNumber, text: text }
           : { number: cleanNumber, message: text };
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+
         const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': gatewayApiKey
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           const errText = await response.text();
@@ -49,7 +56,7 @@ export class WhatsAppService {
 
         console.log(`Mensagem enviada com sucesso via Gateway para ${to}`);
         return true;
-      } catch (err: any) {
+      } catch (err) {
         console.error(`Erro ao enviar via WhatsApp Gateway:`, err);
         return false;
       }
@@ -83,14 +90,23 @@ export class WhatsAppService {
 
         console.log(`Mensagem enviada com sucesso via Meta Cloud API para ${to}`);
         return true;
-      } catch (err: any) {
+      } catch (err) {
         console.error(`Erro ao enviar via WhatsApp Cloud API:`, err);
         return false;
       }
     }
 
     // Fallback Mock de testes se nenhuma credencial estiver configurada
-    console.warn(`Credenciais de WhatsApp não configuradas. Mensagem simulada para ${to}: "${text.slice(0, 50)}..."`);
-    return true;
+    if (process.env.NODE_ENV === 'development' || !process.env.NODE_ENV) {
+      console.warn(`[DEV] Credenciais de WhatsApp não configuradas. Mensagem simulada para ${to}: "${text.slice(0, 50)}..."`);
+      return true;
+    }
+    console.error(`[PROD] Erro: Credenciais do WhatsApp não configuradas no servidor.`);
+    return false;
   }
+}
+
+// Handler padrão para evitar exposição pública direta na rota /api/whatsapp
+export default async function handler(_req: VercelRequest, res: VercelResponse) {
+  res.status(403).json({ error: 'Acesso proibido' });
 }

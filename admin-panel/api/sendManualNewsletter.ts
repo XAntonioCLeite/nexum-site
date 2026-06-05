@@ -1,11 +1,19 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { db } from './_db';
-import { WhatsAppService } from './_whatsapp';
-import * as admin from 'firebase-admin';
+import { db } from './db.js';
+import { WhatsAppService } from './whatsapp.js';
+import admin from 'firebase-admin';
 
 const SENDER_EMAIL = 'antonio_cleite@hotmail.com';
 const SENDER_NAME = 'Antônio - Nexum AI';
 const LOGO_URL = 'https://nexumai.me/logo-solido.png';
+
+function sanitizeText(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/nexum\.ai/gi, 'nexumai.me')
+    .replace(/nexumai\.com\.br/gi, 'nexumai.me')
+    .replace(/2024/g, '2026');
+}
 
 async function sendBrevoEmail(to: string, subject: string, htmlContent: string) {
   const brevoApiKey = process.env.BREVO_API_KEY || '';
@@ -15,14 +23,14 @@ async function sendBrevoEmail(to: string, subject: string, htmlContent: string) 
   }
 
   const formattedHtml = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
-      <div style="text-align: center; margin-bottom: 20px;">
+    <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px 20px; background-color: #0b0c10; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); color: #e2e8f0;">
+      <div style="text-align: center; margin-bottom: 25px;">
         <img src="${LOGO_URL}" alt="Nexum AI" style="width: 140px; height: auto;" />
       </div>
-      <div style="background-color: #ffffff; padding: 30px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); color: #333333; line-height: 1.6;">
+      <div style="background-color: #12141c; padding: 35px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); color: #e2e8f0; line-height: 1.6; font-size: 15px;">
         ${htmlContent}
       </div>
-      <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #999999;">
+      <div style="text-align: center; margin-top: 25px; font-size: 11px; color: #64748b; font-family: monospace;">
         Você está recebendo este e-mail porque se cadastrou no Radar Nexum AI.<br/>
         Nexum AI &copy; 2026. Todos os direitos reservados.
       </div>
@@ -86,7 +94,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const snapshot = await db.collection('leads').get();
     const leads: any[] = [];
-    snapshot.forEach(doc => {
+    snapshot.forEach((doc: any) => {
       const data = doc.data();
       leads.push({
         id: doc.id,
@@ -101,14 +109,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let emailsEnviados = 0;
     let whatsappsEnviados = 0;
 
+    // Sanitizar cópias manuais para evitar anos passados ou domínios incorretos
+    const sanitizedSubject = sanitizeText(subject || '');
+    const sanitizedEmailBody = sanitizeText(emailBody || '');
+    const sanitizedWhatsappBody = sanitizeText(whatsappBody || '');
+
     for (const lead of leads) {
       // Disparar E-mail
       if ((targetType === 'email' || targetType === 'both') && 
           (lead.subscribeType === 'email' || lead.subscribeType === 'both') && 
-          lead.email && subject && emailBody) {
+          lead.email && sanitizedSubject && sanitizedEmailBody) {
         try {
-          await sendBrevoEmail(lead.email, subject, emailBody);
-          emailsEnviados++;
+          const success = await sendBrevoEmail(lead.email, sanitizedSubject, sanitizedEmailBody);
+          if (success) emailsEnviados++;
         } catch (e) {
           console.error(`Erro no email manual para ${lead.email}:`, e);
         }
@@ -117,12 +130,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Disparar WhatsApp
       if ((targetType === 'whatsapp' || targetType === 'both') && 
           (lead.subscribeType === 'whatsapp' || lead.subscribeType === 'both') && 
-          lead.phone && whatsappBody) {
+          lead.phone && sanitizedWhatsappBody) {
         try {
           const firstName = lead.name.split(' ')[0];
-          const personalizedMsg = whatsappBody.replace(/{nome}/gi, firstName);
-          await WhatsAppService.sendMessage(lead.phone, personalizedMsg);
-          whatsappsEnviados++;
+          const personalizedMsg = sanitizedWhatsappBody.replace(/{nome}/gi, firstName);
+          const success = await WhatsAppService.sendMessage(lead.phone, personalizedMsg);
+          if (success) whatsappsEnviados++;
         } catch (e) {
           console.error(`Erro no whatsapp manual para ${lead.phone}:`, e);
         }
@@ -135,9 +148,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       date: admin.firestore.Timestamp.now(),
       emailsCount: emailsEnviados,
       whatsappsCount: whatsappsEnviados,
-      subject: subject || '',
-      emailContent: emailBody || '',
-      whatsappContent: whatsappBody || ''
+      subject: sanitizedSubject,
+      emailContent: sanitizedEmailBody,
+      whatsappContent: sanitizedWhatsappBody
     });
 
     res.status(200).json({

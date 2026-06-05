@@ -16,7 +16,12 @@ interface Lead {
 const App: React.FC = () => {
   // State
   const [apiUrl, setApiUrl] = useState(() => {
-    return localStorage.getItem('nexum_api_url') || 'https://subscribe-leads-api.nexumai.me';
+    const saved = localStorage.getItem('nexum_api_url');
+    if (saved === 'https://subscribe-leads-api.nexumai.me') {
+      localStorage.setItem('nexum_api_url', 'https://admin-panel-black-eta.vercel.app/api');
+      return 'https://admin-panel-black-eta.vercel.app/api';
+    }
+    return saved || 'https://admin-panel-black-eta.vercel.app/api';
   });
   const [isEditingApi, setIsEditingApi] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);

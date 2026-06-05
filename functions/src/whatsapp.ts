@@ -36,14 +36,19 @@ export class WhatsAppService {
           ? { number: cleanNumber, text: text }
           : { number: cleanNumber, message: text };
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+
         const response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': gatewayApiKey
           },
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           const errText = await response.text();
@@ -96,7 +101,11 @@ export class WhatsAppService {
     }
 
     // Fallback Mock de testes se nenhuma credencial estiver configurada
-    logger.warn(`Credenciais de WhatsApp não configuradas. Mensagem simulada para ${to}: "${text.slice(0, 50)}..."`);
-    return true;
+    if (process.env.FUNCTIONS_EMULATOR === 'true' || process.env.NODE_ENV === 'development') {
+      logger.warn(`[DEV] Credenciais de WhatsApp não configuradas. Mensagem simulada para ${to}: "${text.slice(0, 50)}..."`);
+      return true;
+    }
+    logger.error(`[PROD] Erro: Credenciais do WhatsApp não configuradas no servidor.`);
+    return false;
   }
 }

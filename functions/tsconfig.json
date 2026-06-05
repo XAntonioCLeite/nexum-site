@@ -4,7 +4,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "lib",
-    "registerContext": true,
+    "esModuleInterop": true,
     "removeComments": true,
     "resolveJsonModule": true,
     "sourceMap": true,
